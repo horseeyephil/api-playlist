@@ -1,0 +1,90 @@
+type User {
+  id: ID!
+  email: String
+  name: String
+  username: String!
+  playlists: [Playlist!]
+  friends: [User!] 
+}
+
+type Playlist {
+  id: ID!
+  title: String!
+  description: String!
+  creator: User!
+  rankedMembers: [RankedMember!]!
+}
+
+type Restaurant {
+  id: ID!
+  address: String!
+  name: String!
+  rankedMembers: [RankedMember!]
+  featuredIn: [Playlist!]
+}
+
+type RankedMember {
+  id: ID!
+  rankPosition: Int
+  review: String!
+  restaurant: Restaurant!
+  playlist: Playlist!
+}
+
+input RestaurantInput {
+  address: String!
+  name: String!
+}
+
+input CreateRestaurantInput {
+  create: RestaurantInput!
+}
+
+input RankedMemberInput {
+  rankPosition: Int
+  review: String!
+}
+
+input CreateRankedMembersInput {
+  create: [RankedMemberInput!]!
+}
+
+type Query {
+  user(username: String!): User
+
+  playlist(id: Int!): Playlist
+  playlistSearch(keyword: String!) : [Playlist!]
+
+  restaurant(id: Int!) : Restaurant!
+  restaurantsByName(name: String!) : [Restaurant!]
+  restaurantSearch(keyword: String!) : [Restaurant!]
+}
+
+type Mutation {
+  addUser(username: String! name: String email: String!): User
+
+  createPlaylist(
+    title: String!, 
+    description: String!, 
+    creatorId: Int!) : Playlist
+
+  createMemberWithRestaurant(
+    playlistId: Int!
+    rankedMember: RankedMemberInput!
+    restaurant: RestaurantInput!
+  ): RankedMember
+
+  editPlaylist(
+    title: String
+    description: String) : Playlist
+
+  addToPlaylist(playlistId: Int!, rankedMembers: [RankedMemberInput!]!) : Playlist
+
+  editRankedMember(
+    id: Int!,
+    data: RankedMemberInput!) : RankedMember
+
+  deleteRankedMember(id: Int!) : Boolean
+
+  addRestaurant(fields: RestaurantInput!) : Restaurant
+}

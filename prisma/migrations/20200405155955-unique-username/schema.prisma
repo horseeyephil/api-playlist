@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+model User {
+  id            Int      @default(autoincrement()) @id
+  email         String   @unique
+  username      String   @unique
+  name          String?
+  playlists     Playlist[]
+  rankedMembers RankedMember[]
+  followedBy    User[]   @relation("UserFollows", references: [id])
+  following     User[]   @relation("UserFollows", references: [id])
+}
+
+model Playlist {
+  id            Int       @default(autoincrement()) @id
+  createdAt     DateTime  @default(now())
+  title         String   
+  description   String
+  rankedMembers RankedMember[]
+  creator       User      @relation(fields: [userId], references: [id])
+  userId        Int
+}
+
+model RankedMember {
+  id            Int         @default(autoincrement()) @id
+  createdAt     DateTime    @default(now())
+  rankPosition  Int?
+  review        String
+  restaurant    Restaurant  @relation(fields: [restaurantId], references: [id])
+  restaurantId  Int         
+  playlist      Playlist    @relation(fields: [playlistId], references: [id])
+  playlistId    Int         
+}
+
+model Restaurant {
+  id            Int              @default(autoincrement()) @id
+  address       String           @unique
+  name          String
+  rankedMembers RankedMember[]   
+  featuredIn    Playlist[]       
+}

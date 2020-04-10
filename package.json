@@ -1,0 +1,24 @@
+{
+  "name": "api-playlist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@prisma/client": "^2.0.0-beta.1",
+    "apollo-server": "^2.11.0",
+    "graphql-import": "^1.0.1"
+  },
+  "devDependencies": {
+    "@prisma/cli": "^2.0.0-beta.1"
+  },
+  "scripts": {
+    "start": "node index",
+    "start:dev": "nodemon index",
+    "prisma:up": "npx prisma migrate up --experimental && npx prisma generate",
+    "prisma:schema": "npx prisma migrate save --experimental",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

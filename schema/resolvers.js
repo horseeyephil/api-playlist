@@ -18,15 +18,22 @@ const resolvers = {
         }}
       })
     },
-    restaurant(_, { id }, { prisma }) {
+    restaurant(_, { id }) {
       return prisma.restaurant.findOne({ where: { id }})
     },
-    restaurantsByName(_, { name }, { prisma }) {
-      return prisma.restaurants({
+    restaurantsByName(_, { name }) {
+      return prisma.restaurant.findMany({
         where: { name: { 
           contains: name.toLowerCase()
         }}
       })
+    },
+    async restaurantSearch(_, { keyword }) {
+      console.log('hi', keyword)
+      const key = keyword + '%'
+      const r = await prisma.raw`SELECT * FROM "public"."Restaurant" WHERE name ILIKE ${key};`
+      console.log('whooooooo', r)
+      return r
     }
   },
   Mutation: {
